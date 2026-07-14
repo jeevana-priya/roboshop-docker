@@ -2,17 +2,20 @@ name: roboshop
 services:
   mongodb: 
     build: ./mongodb
-    image: <docker_username>/mongodb:v1 #this is docker build
+    image: jpriya8246/mongodb:v1 #this is docker build
     container_name: mongodb # this is docker run -d --network roboshop joindevops/mongodb:v1
   catalogue:
     build: ./catalogue  
-    image: <docker username>/catalogue:v1
+    image: jpriya8246/catalogue:v1
     container_name: catalogue
     depends_on:
       - mongodb
+    environment:
+      MONGO_URL="mongodb://mongodb:27017/catalogue" \
+      MONGO=true
   frontend:
     build: ./frontend
-    image: <docker_username>/frontend:v1
+    image: jpriya8246/frontend:v1
     container_name: frontend
     ports:
     - "80:80"
@@ -24,12 +27,12 @@ services:
       - payment
   user:
     build: ./user
-    image: <docker_username>/user:v1
+    image: jpriya8246/user:v1
     container_name: user
     depends_on:
     - redis
     - mongodb
-    
+    environment:
       MONGO: true
       REDIS_URL: 'redis://redis:6379'
       MONGO_URL: "mongodb://mongodb:27017/users"
@@ -39,9 +42,9 @@ services:
     container_name: redis # docker run -d --name redis --network roboshop redis:7
   cart:
     build: ./cart
-    image: <docker_username>/cart:v1
+    image: jpriya8246/cart:v1
     container_name: cart
-    
+    environment:
      REDIS_HOST: redis
      CATALOGUE_HOST: catalogue
      CATALOGUE_PORT: 8080
@@ -50,18 +53,18 @@ services:
       - catalogue
   mysql:
     build: ./mysql
-    image: <docker_username>/mysql:v1
+    image: jpriya8246/mysql:v1
     container_name: mysql
     command: 
       --mysql_native_password= ON
       --innodb-lock_wait_timeout=120
-    
+    environment:
       MYSQL_ROOT_PASSWORD: "RoboShop@1"
   shipping:
     build: ./shipping
-    image: <docker_username>/shipping:v1
+    image: jpriya8246/shipping:v1
     container_name: shipping
-    
+    environment:
       CART_ENDPOINT: "cart:8080"
       DB_HOST: mysql
     depends_on:
@@ -71,12 +74,12 @@ services:
   rabbitmq:
     image: rabbitmq:3
     container_name: rabbitmq
-    
+    environment:
       RABBITMQ_DEFAULT_USER: roboshop
       RABBITMQ_DEFAULT_PASS: roboshop123
   payment:
     build: ./payment
-    image: <docker_username>/payment:v1
+    image: jpriya8246/payment:v1
     container_name: payment
     environment:
       CART_HOST: "cart"
