@@ -43,7 +43,7 @@ services:
     image: redis:7
     container_name: redis # docker run -d --name redis --network roboshop redis:7
     volumes:
-    - redis: /data
+    - redis:/data
   cart:
     build: ./cart
     image: jpriya8246/cart:v1
@@ -110,5 +110,5 @@ networks:
 volumes:
   mongodb: # docker volumes create mongodb
   rabbitMq: #
-  redis:
-  mysql:
+  redis: #
+  mysql: #
