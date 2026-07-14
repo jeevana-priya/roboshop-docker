@@ -5,7 +5,7 @@ services:
     image: jpriya8246/mongodb:v1 #this is docker build
     container_name: mongodb # this is docker run -d --network roboshop joindevops/mongodb:v1
     volumes: 
-    - mongodb: /data/db # mongodb stores data here
+    - mongodb:/data/db # mongodb stores data here
   catalogue:
     build: ./catalogue  
     image: jpriya8246/catalogue:v1
@@ -65,7 +65,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "RoboShop@1"
     volumes:
-      -mysql: /var/lib/mysql
+      -mysql:/var/lib/mysql
   shipping:
     build: ./shipping
     image: jpriya8246/shipping:v1
@@ -84,7 +84,7 @@ services:
       RABBITMQ_DEFAULT_USER: roboshop
       RABBITMQ_DEFAULT_PASS: roboshop123
     volumes:
-      -rabbitMq: /var/lib/rabbitmq
+      -rabbitMq:/var/lib/rabbitmq
   payment:
     build: ./payment
     image: jpriya8246/payment:v1
